@@ -20,5 +20,6 @@ How to compile
 
 Bug
 ---
+* different style between `sudo` and `normal`
 * close button doesn't work
 * check argument at first !
