@@ -1,5 +1,11 @@
 Modbus protocol emulator based on QT
 ====================================
+Feature
+-------
+* Support modbus RTU (master/slave) and modbus TCP (master/slave)
+* Support function code 1 ~ 6
+* Support excption code 1 ~ 4
+* Support respons time display
 
 Tools
 ------------
@@ -8,10 +14,11 @@ Tools
 
 How to compile
 ---------------
-* first, type `qmake`
-* Type `make`
-* then, `sudo ./QTmbus`
+1. `qmake` -> to generate Makfile
+2. `make`
+3. `sudo ./QTmbus`
 
 Bug
 ---
 * close button doesn't work
+* check argument at first !
