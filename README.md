@@ -21,4 +21,5 @@ How to compile
 Bug
 ---
 * different UI style between `sudo` and `normal`
+* The close button is still break
 * check argument at first !
