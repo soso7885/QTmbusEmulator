@@ -59,6 +59,8 @@ Tester::Tester(struct argu_table *table)
 				tcp_table->len = table->tLen;
 			}
 			break;
+		default:
+			break;
 	}
 }
 
@@ -74,6 +76,8 @@ Tester::~Tester(void)
 
 void Tester::startTest(void)
 {
+	isRunning = 1;
+
 	switch(table->mode){
 		case SERIAL_MASTER:
 			qDebug("Start modbus serial master !");
@@ -95,6 +99,14 @@ void Tester::startTest(void)
 			qDebug("Failed !");
 	}
 }
+
+void Tester::stopTest(void)
+{
+	isRunning = 0;
+	QThread::currentThread()->sleep(2);
+	QThread::currentThread()->quit();
+	delete this;
+}	
 
 extern "C"
 {

@@ -17,12 +17,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->FCspinBox, SIGNAL(valueChanged(int)),
 			this, SLOT(adjustFcArgu()));
 	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(takeArgu()));
-//	connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(NO()));
+	connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(tellTesterStop()));
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::tellTesterStop(void)
+{
+	emit stopSignal();
 }
 
 /*
@@ -180,11 +185,11 @@ void MainWindow::initTester(void)
 	
 	tester->moveToThread(thread);
 	connect(thread, SIGNAL(started()), tester, SLOT(startTest()));
-	connect(tester, SIGNAL(finished()), thread, SLOT(quit()));
 	connect(tester, SIGNAL(res_signal(struct res_disp_table *)),
 			this, SLOT(res_update(struct res_disp_table *)));
 	connect(tester, SIGNAL(excp_signal(struct res_disp_table *)),
 			this, SLOT(excp_update(struct res_disp_table *)));
+	connect(this, SIGNAL(stopSignal()), tester, SLOT(stopTest()));
 	
 	thread->start();
 }

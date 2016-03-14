@@ -7,6 +7,12 @@
 */
 void *QtClass;
 
+/* 
+ * Gloable variance:
+ * The stop test flag
+*/
+int isRunning;
+
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);

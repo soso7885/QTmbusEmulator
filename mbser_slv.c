@@ -233,10 +233,10 @@ void mbus_ser_slv(struct argu_ser_table *table, void *pQtClass)
 			rlock = 0;
 			wlock = 0;
 		}
-
-	}while(1);
+	}while(isRunning);
 	
 	close(fd);
 	free(sfpara);
+	
 }
 

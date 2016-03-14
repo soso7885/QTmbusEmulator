@@ -301,7 +301,7 @@ void *work_thread(void *data)
 			rlock = 0;
 			wlock = 0;
 		}
-	}while(1);
+	}while(isRunning);
 
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);

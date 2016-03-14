@@ -214,7 +214,7 @@ void mbus_tcp_mstr(struct argu_tcp_table *table, void *pQtClass)
 			rlock = 0;
 			wlock = 0;
 		}
-	}while(1);
+	}while(isRunning);
 	
 	close(skfd);
 	free(tmfpara);

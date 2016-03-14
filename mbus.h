@@ -93,6 +93,8 @@
 
 /* QT Test class pointer */
 extern void *QtClass;
+/* Stop test flag */
+extern int isRunning;
 
 static inline float 
 _get_resp_time(struct timespec *t_read, struct timespec *t_write)

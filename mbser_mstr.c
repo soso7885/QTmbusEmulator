@@ -200,7 +200,7 @@ void mbus_ser_mstr(struct argu_ser_table *table, void *pQtClass)
 			rlock = 0;
 			wlock = 0;
 		}
-	}while(1);
+	}while(isRunning);
 	
 	close(fd);
 	free(mfpara);

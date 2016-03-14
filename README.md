@@ -20,6 +20,5 @@ How to compile
 
 Bug
 ---
-* different style between `sudo` and `normal`
-* close button doesn't work
+* different UI style between `sudo` and `normal`
 * check argument at first !

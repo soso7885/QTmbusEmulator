@@ -101,6 +101,10 @@ private slots:
 	void adjustModeArgu(void);
 	void adjustFcArgu(void);
 	void takeArgu(void);
+	void tellTesterStop(void);
+
+signals:
+	void stopSignal(void);
 };
 
 class Tester : public QObject
@@ -115,12 +119,12 @@ private:
 public:
 	explicit Tester(struct argu_table *table);
 	~Tester(void);
-
-
+	
 private slots:
 
 public slots:
 	void startTest(void);
+	void stopTest(void);
 
 signals:
 	void res_signal(struct res_disp_table *res_table);
