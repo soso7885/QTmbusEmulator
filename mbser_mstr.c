@@ -13,7 +13,7 @@ static struct frm_para * set_item(struct argu_ser_table *table)
 	}
 	printf("RTU Master mode !\n");
 	mfpara->slvID = table->slvID;
-	mfpara->straddr = 0;	// force 
+	mfpara->straddr = 1;	// force 
 	switch(table->fc){
 		case 1:
 			mfpara->fc = READCOILSTATUS;
@@ -162,7 +162,7 @@ void mbus_ser_mstr(struct argu_ser_table *table, void *pQtClass)
 		}
 
 		/* Send Query */
-		if(FD_ISSET(fd, &wfds) && !wlock){
+		if(FD_ISSET(fd, &wfds) && !wlock && !rlock){
 			sleep(1);
 			_writeAll(fd, tx_buf, txlen);
 			clock_gettime(CLOCK_REALTIME, &t_write);
@@ -201,7 +201,8 @@ void mbus_ser_mstr(struct argu_ser_table *table, void *pQtClass)
 			wlock = 0;
 		}
 	}while(isRunning);
-	
+
+	printf("%s is closing...\n", __func__);
 	close(fd);
 	free(mfpara);
 }

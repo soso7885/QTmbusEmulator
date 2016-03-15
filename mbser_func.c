@@ -197,17 +197,18 @@ int _build_frame(unsigned char *src, const char *fmt, ...)
 	pbuf = src;
 	va_start(ap, fmt);
 
-	for(pfmt = fmt, byte = 0; *pfmt != 0; ++pfmt, ++byte){
+	for(pfmt = fmt, byte = 0; *pfmt != 0; ++pfmt){
 		switch(*pfmt){
 			case 'c':	// unsigend char
 				*pbuf++ = va_arg(ap, int);
+				byte++;
 				break;
 			case 'S':	// unsigned short (big endian)
 			{
 				unsigned short tmp_S = va_arg(ap, int);
 				*pbuf++ = tmp_S >> 8;	// data addr Hi
 				*pbuf++ = tmp_S & 0xff;		// data addr Lo
-				byte++;
+				byte += 2;
 			}
 				break;
 			case 's':	// unsigned short (little endian)
@@ -216,15 +217,16 @@ int _build_frame(unsigned char *src, const char *fmt, ...)
 				// need to invert
 				*pbuf++ = (unsigned char)tmp_s;	// data addr Hi
 				*pbuf++ = tmp_s >> 8;			// data addr Lo
-				byte++;
+				byte += 2;
 			}
 				break;
 			case 'D':	// the register data value
 			{
 				int i;
-				for(i = 0; i < va_arg(ap, int); i++)
-					*pbuf++ = 0;
-				byte += (i-1);
+				int count = va_arg(ap, int);
+				for(i = 0; i < count; i++)
+					*pbuf++ = i;
+				byte += i;
 			}
 				break;
 			default:
@@ -235,7 +237,6 @@ int _build_frame(unsigned char *src, const char *fmt, ...)
 	}
 
 	va_end(ap);
-
 	return byte;
 }
 /*
@@ -325,13 +326,12 @@ int ser_build_resp_read_status(unsigned char *tx_buf, struct frm_para *sfpara, u
 	unsigned char src[FRMLEN];
 	
 	slvID = (unsigned char)sfpara->slvID;
-	byte = carry(sfpara->len, 8);
+	byte = (int)carry(sfpara->len, 8);
 //	printf("<modbus serial slave> respond read %s status\n", fc==READCOILSTATUS?"coil":"input");
-	
+
 	src_len = _build_frame(src, "cccD", slvID, fc, (unsigned char)byte, byte);
 	build_rtu_frm(tx_buf, src, src_len);
 	src_len += 2;	// CRC 2 byte
-		
 	return src_len;
 } 
 /* 

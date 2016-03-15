@@ -14,7 +14,7 @@ static struct frm_para * set_item(struct argu_ser_table *table)
 	
 	printf("RTU Modbus Slave mode !\n");
 	sfpara->slvID = table->slvID;
-	sfpara->straddr = 0;
+	sfpara->straddr = 1;
 
 	switch(table->fc){
 		case 1:
@@ -162,7 +162,7 @@ void mbus_ser_slv(struct argu_ser_table *table, void *pQtClass)
 
 	sfpara = set_item(table);
 	if(sfpara == NULL){
-		printf("<Modbus Serial Slave> Set item fail\n");
+		printf("<Modbus Serial Slave> Set item failed\n");
 		exit(0);
 	}
 
@@ -198,7 +198,7 @@ void mbus_ser_slv(struct argu_ser_table *table, void *pQtClass)
 			continue;
 		}
 		/* Recv Query */
-		if(FD_ISSET(fd, &rfds) && !rlock){
+		if(FD_ISSET(fd, &rfds) && !rlock && !wlock){
 			_readAll(fd, rx_buf, SERRECVQRYLEN);
 			res_table.rx_buf = rx_buf;
 			res_table.rxlen = SERRECVQRYLEN;
@@ -234,7 +234,7 @@ void mbus_ser_slv(struct argu_ser_table *table, void *pQtClass)
 			wlock = 0;
 		}
 	}while(isRunning);
-	
+	printf("%s is closing...\n", __func__);
 	close(fd);
 	free(sfpara);
 	

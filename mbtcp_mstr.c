@@ -20,7 +20,7 @@ static struct tcp_frm_para * set_item(struct argu_tcp_table *table)
 	tmfpara->potoID = (unsigned char)TCPMBUSPROTOCOL;
 	tmfpara->msglen = (unsigned char)TCPQUERYMSGLEN;
 	tmfpara->unitID = table->unitID;
-	tmfpara->straddr = 0;	// force start address = 0
+	tmfpara->straddr = 1;	// force start address = 0
 	switch(table->fc){
 		case 1:
 			tmfpara->fc = READCOILSTATUS;
@@ -172,7 +172,7 @@ void mbus_tcp_mstr(struct argu_tcp_table *table, void *pQtClass)
 			continue;
 		}
 		/* Send Query */
-		if(FD_ISSET(skfd, &wfds) && !wlock){	
+		if(FD_ISSET(skfd, &wfds) && !wlock && !rlock){	
 			sleep(1);
 			_sendAll(skfd, tx_buf, TCPSENDQUERYLEN);
 			clock_gettime(CLOCK_REALTIME, &t_send);
@@ -214,8 +214,12 @@ void mbus_tcp_mstr(struct argu_tcp_table *table, void *pQtClass)
 			rlock = 0;
 			wlock = 0;
 		}
+		if(isRunning == 0){
+			break;
+		}
 	}while(isRunning);
-	
+
+	printf("%s is closing...\n", __func__);	
 	close(skfd);
 	free(tmfpara);
 }

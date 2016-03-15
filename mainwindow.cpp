@@ -27,6 +27,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::tellTesterStop(void)
 {
+	printf("*** %s ****\n", __func__);
 	emit stopSignal();
 }
 
@@ -183,6 +184,7 @@ void MainWindow::initTester(void)
 	QThread *thread = new QThread;
 	Tester *tester = new Tester(&table);
 	
+	connect(this, SIGNAL(stopSignal()), tester, SLOT(stopTest()));
 	tester->moveToThread(thread);
 	connect(thread, SIGNAL(started()), tester, SLOT(startTest()));
 	connect(tester, SIGNAL(res_signal(struct res_disp_table *)),
@@ -369,7 +371,7 @@ QString MainWindow::_mbusDataParser(struct res_disp_table *res_table, const int 
 		case RESP_TIME:
 			Qres = QString::number(res_table->resp_time);
 			Qres.prepend("Response time: ");
-			Qres.append(" (usec)");
+			Qres.append(" (msec)");
 			break;
 		case SEND_EXCP_CODE:
 			switch(*(tx+2)){

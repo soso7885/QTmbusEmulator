@@ -22,7 +22,7 @@ static struct tcp_frm_para * set_item(struct argu_tcp_table *table)
 	printf("Modbus TCP Slave !\n");
 	tsfpara->unitID = table->unitID;
 	tsfpara->potoID = (unsigned char)TCPMBUSPROTOCOL;
-	tsfpara->straddr = 0;
+	tsfpara->straddr = 1;
 	switch(table->fc){
 		case 1:
 			tsfpara->fc = READCOILSTATUS;
@@ -261,7 +261,7 @@ void *work_thread(void *data)
 		}
 
 		/* Recv Query */
-		if(FD_ISSET(rskfd, &rfds) && !rlock){
+		if(FD_ISSET(rskfd, &rfds) && !rlock && !wlock){
 			ret = _recvAll(rskfd, rx_buf, TCPSENDQUERYLEN);
 			if(ret == -1){
 				printf("<Modbus Tcp Slave> disconnect, thread ID = %lu\n", pthread_self());
@@ -302,7 +302,8 @@ void *work_thread(void *data)
 			wlock = 0;
 		}
 	}while(isRunning);
-
+	
+	printf("%s is closing...\n", __func__);
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);
 }
