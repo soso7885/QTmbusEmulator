@@ -72,15 +72,39 @@ struct argu_table{
 	unsigned short tLen;	// TCP
 	unsigned short tAct;	// TCP
 };
+
+class Tester : public QObject
+{
+	Q_OBJECT
+
+private:
+	struct argu_table *table;
+	struct argu_ser_table *ser_table;
+	struct argu_tcp_table *tcp_table;
 	
+public:
+	explicit Tester(struct argu_table *table);
+	~Tester(void);
+	
+private slots:
+
+public slots:
+	void startTest(void);
+
+signals:
+	void res_signal(struct res_disp_table *res_table);
+	void excp_signal(struct res_disp_table *res_table);
+};
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
 private:
 	Ui::MainWindow *ui;
- 
-	QThread *thread;	
+
+	Tester *tester;
+	QThread *thread;
 	void _adjustArgu(const char *_switch, ...);
 	void initTester(void);
 
@@ -104,29 +128,6 @@ private slots:
 	void adjustFcArgu(void);
 	void takeArgu(void);
 
-};
-
-class Tester : public QObject
-{
-	Q_OBJECT
-
-private:
-	struct argu_table *table;
-	struct argu_ser_table *ser_table;
-	struct argu_tcp_table *tcp_table;
-	
-public:
-	explicit Tester(struct argu_table *table);
-	~Tester(void);
-	
-private slots:
-
-public slots:
-	void startTest(void);
-
-signals:
-	void res_signal(struct res_disp_table *res_table);
-	void excp_signal(struct res_disp_table *res_table);
 };
 
 #endif

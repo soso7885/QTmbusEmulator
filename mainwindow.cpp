@@ -31,6 +31,7 @@ void MainWindow::tellTesterStop(void)
 	QThread::currentThread()->sleep(1);
 	thread->sleep(1);
 	thread->quit();
+	delete tester;
 }
 
 /*
@@ -184,7 +185,7 @@ void MainWindow::takeArgu(void)
 void MainWindow::initTester(void)
 {
 	thread = new QThread;
-	Tester *tester = new Tester(&table);
+	tester = new Tester(&table);
 	
 	tester->moveToThread(thread);
 	connect(thread, SIGNAL(started()), tester, SLOT(startTest()));

@@ -303,7 +303,6 @@ void *work_thread(void *data)
 		}
 	}while(isRunning);
 	
-	printf("%s is closing...\n", __func__);
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);
 }
@@ -364,9 +363,11 @@ void mbus_tcp_slv(struct argu_tcp_table *table, void *pQtClass)
 			handle_error_en(ret, "pthread_create");
 		}	
 	}while(0);
-	pthread_join(tid, NULL);
 
+	pthread_join(tid, NULL);
+	printf("%s is closing...\n", __func__);
 	close(skfd);
+	close(rskfd);
 	pthread_mutex_destroy(&(tpack.mutex));
 	pthread_attr_destroy(&attr);
 	free(tsfpara);
