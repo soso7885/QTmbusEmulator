@@ -79,7 +79,8 @@ class MainWindow : public QMainWindow
 
 private:
 	Ui::MainWindow *ui;
- 	
+ 
+	QThread *thread;	
 	void _adjustArgu(const char *_switch, ...);
 	void initTester(void);
 
@@ -96,15 +97,13 @@ public:
 public slots:
 	void res_update(struct res_disp_table *res_table);
 	void excp_update(struct res_disp_table *res_table);
+	void tellTesterStop(void);
 
 private slots:
 	void adjustModeArgu(void);
 	void adjustFcArgu(void);
 	void takeArgu(void);
-	void tellTesterStop(void);
 
-signals:
-	void stopSignal(void);
 };
 
 class Tester : public QObject
@@ -124,7 +123,6 @@ private slots:
 
 public slots:
 	void startTest(void);
-	void stopTest(void);
 
 signals:
 	void res_signal(struct res_disp_table *res_table);

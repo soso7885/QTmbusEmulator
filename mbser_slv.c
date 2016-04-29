@@ -234,9 +234,9 @@ void mbus_ser_slv(struct argu_ser_table *table, void *pQtClass)
 			wlock = 0;
 		}
 	}while(isRunning);
+	
 	printf("%s is closing...\n", __func__);
 	close(fd);
 	free(sfpara);
-	
 }
 

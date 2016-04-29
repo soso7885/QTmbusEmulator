@@ -100,15 +100,6 @@ void Tester::startTest(void)
 	}
 }
 
-void Tester::stopTest(void)
-{
-	printf("*** %s ***\n", __func__);
-	isRunning = 0;
-	QThread::currentThread()->sleep(2);
-	QThread::currentThread()->quit();
-	delete this;
-}	
-
 extern "C"
 {
 	void c_connector(struct res_disp_table *res_table, void *QtClass)

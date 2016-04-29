@@ -363,7 +363,8 @@ void mbus_tcp_slv(struct argu_tcp_table *table, void *pQtClass)
 		if(ret != 0){
 			handle_error_en(ret, "pthread_create");
 		}	
-	}while(1);
+	}while(0);
+	pthread_join(tid, NULL);
 
 	close(skfd);
 	pthread_mutex_destroy(&(tpack.mutex));

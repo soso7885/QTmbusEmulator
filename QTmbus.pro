@@ -8,6 +8,7 @@ INCLUDEPATH += .
 
 QT += widgets
 QT += core
+QT += gui
 
 # Input
 HEADERS += mainwindow.h mbus.h ui_mainwindow.h

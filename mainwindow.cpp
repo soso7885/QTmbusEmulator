@@ -27,8 +27,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::tellTesterStop(void)
 {
-	printf("*** %s ****\n", __func__);
-	emit stopSignal();
+	isRunning = 0;
+	QThread::currentThread()->sleep(1);
+	thread->sleep(1);
+	thread->quit();
 }
 
 /*
@@ -181,17 +183,15 @@ void MainWindow::takeArgu(void)
 
 void MainWindow::initTester(void)
 {
-	QThread *thread = new QThread;
+	thread = new QThread;
 	Tester *tester = new Tester(&table);
 	
-	connect(this, SIGNAL(stopSignal()), tester, SLOT(stopTest()));
 	tester->moveToThread(thread);
 	connect(thread, SIGNAL(started()), tester, SLOT(startTest()));
 	connect(tester, SIGNAL(res_signal(struct res_disp_table *)),
 			this, SLOT(res_update(struct res_disp_table *)));
 	connect(tester, SIGNAL(excp_signal(struct res_disp_table *)),
 			this, SLOT(excp_update(struct res_disp_table *)));
-	connect(this, SIGNAL(stopSignal()), tester, SLOT(stopTest()));
 	
 	thread->start();
 }
